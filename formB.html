@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>審查小組委員推薦表</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500&display=swap');
+
+  :root {
+    --primary: #2d5c3a;
+    --accent: #c8933a;
+    --bg: #f4f5f2;
+    --surface: #fff;
+    --border: #d4d9cc;
+    --text: #1c1c1c;
+    --muted: #636b5a;
+    --error: #c0392b;
+    --success: #1e7a4a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 60px; }
+
+  .banner { background: var(--primary); color: #fff; padding: 28px 32px 22px; border-bottom: 4px solid var(--accent); }
+  .banner .org { font-size: 11px; letter-spacing: 2px; color: rgba(255,255,255,.6); margin-bottom: 8px; }
+  .banner h1 { font-family: 'Noto Serif TC', serif; font-size: 18px; font-weight: 700; line-height: 1.65; margin-bottom: 6px; }
+  .banner .sub { font-size: 13px; color: rgba(255,255,255,.7); }
+  .badge { display: inline-block; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: 1px; margin-top: 10px; }
+
+  /* 推薦人數 badge */
+  .count-bar {
+    background: rgba(255,255,255,.12); border-radius: 6px;
+    padding: 8px 14px; margin-top: 14px; font-size: 13px; color: rgba(255,255,255,.85);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .count-num { font-weight: 700; font-size: 18px; color: #fff; }
+
+  .wrap { max-width: 700px; margin: 0 auto; padding: 0 16px; }
+
+  .sec-hd { display: flex; align-items: center; gap: 10px; margin: 32px 0 16px; }
+  .sec-n { width: 28px; height: 28px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+  .sec-t { font-family: 'Noto Serif TC', serif; font-size: 15px; font-weight: 700; color: var(--primary); border-bottom: 2px solid var(--accent); padding-bottom: 3px; flex: 1; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 22px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+
+  /* 推薦單位鎖定提示 */
+  .org-locked { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  .org-info { font-size: 14px; }
+  .org-info strong { color: var(--primary); }
+  .org-info span { color: var(--muted); font-size: 13px; }
+  .btn-change { background: none; border: 1px solid var(--border); border-radius: 4px; padding: 5px 12px; font-size: 12px; color: var(--muted); cursor: pointer; font-family: inherit; transition: all .2s; }
+  .btn-change:hover { border-color: var(--primary); color: var(--primary); }
+
+  .notice { background: #fdf8ee; border-left: 3px solid var(--accent); padding: 12px 16px; border-radius: 0 4px 4px 0; margin-bottom: 18px; }
+  .notice p { font-size: 13px; color: #5a4a2a; line-height: 1.85; }
+
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .row1 { margin-bottom: 14px; }
+  .f { display: flex; flex-direction: column; gap: 5px; }
+  label { font-size: 13px; font-weight: 500; color: #3a3530; }
+  .req { color: var(--error); margin-left: 2px; }
+  .hint { font-weight: 300; color: var(--muted); font-size: 11px; margin-left: 4px; }
+
+  input, textarea {
+    border: 1px solid var(--border); border-radius: 4px; padding: 9px 11px;
+    font-size: 14px; font-family: 'Noto Sans TC', sans-serif; color: var(--text);
+    background: #fff; outline: none; width: 100%;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  input:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(45,92,58,.12); }
+  input.err { border-color: var(--error); }
+  textarea { resize: vertical; min-height: 80px; }
+
+  /* Category */
+  .cat-group-lbl { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--muted); margin: 12px 0 6px; }
+  .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+  .cat-pill {
+    display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px;
+    border: 1px solid var(--border); border-radius: 4px; cursor: pointer; transition: all .15s;
+  }
+  .cat-pill:hover { border-color: var(--primary); background: #f0f5f1; }
+  .cat-pill.on { border-color: var(--primary); background: #eaf2ec; }
+  .cat-pill input { width: 15px; height: 15px; margin-top: 2px; flex-shrink: 0; accent-color: var(--primary); cursor: pointer; }
+  .cat-lbl { font-size: 13px; line-height: 1.4; }
+  .cat-code { font-weight: 700; color: var(--primary); font-size: 12px; }
+
+  .avail-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+  .avail-pill {
+    display: flex; align-items: center; gap: 6px; padding: 6px 12px;
+    border: 1px solid var(--border); border-radius: 20px; cursor: pointer;
+    font-size: 13px; transition: all .15s; user-select: none;
+  }
+  .avail-pill input { width: auto; accent-color: var(--primary); }
+  .avail-pill.on { border-color: var(--primary); background: #eaf2ec; color: var(--primary); font-weight: 500; }
+
+  .emsg { font-size: 11px; color: var(--error); margin-top: 3px; display: none; }
+  .emsg.on { display: block; }
+  .divider { border: none; border-top: 1px dashed var(--border); margin: 16px 0; }
+
+  .submit-area { margin-top: 32px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .btn-submit {
+    background: var(--primary); color: #fff; border: none; border-radius: 6px;
+    padding: 13px 48px; font-size: 16px; font-family: 'Noto Serif TC', serif;
+    font-weight: 700; cursor: pointer; transition: all .2s; letter-spacing: 1px;
+  }
+  .btn-submit:hover { background: #1e3f28; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(45,92,58,.25); }
+  .btn-submit:disabled { background: #aaa; cursor: not-allowed; transform: none; box-shadow: none; }
+  .submit-hint { font-size: 12px; color: var(--muted); }
+
+  /* 送出後繼續填 */
+  .next-screen { display: none; text-align: center; padding: 48px 20px; }
+  .next-screen.on { display: block; }
+  .next-icon { width: 56px; height: 56px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 24px; color: #fff; }
+  .next-screen h2 { font-family: 'Noto Serif TC', serif; font-size: 20px; color: var(--primary); margin-bottom: 10px; }
+  .next-screen p { font-size: 13px; color: var(--muted); line-height: 1.8; margin-bottom: 24px; }
+  .btn-next { background: var(--primary); color: #fff; border: none; border-radius: 6px; padding: 11px 36px; font-size: 15px; font-family: 'Noto Serif TC', serif; font-weight: 700; cursor: pointer; letter-spacing: 1px; margin-right: 10px; }
+  .btn-done { background: none; color: var(--muted); border: 1px solid var(--border); border-radius: 6px; padding: 11px 28px; font-size: 14px; font-family: 'Noto Sans TC', sans-serif; cursor: pointer; }
+  .done-screen { display: none; text-align: center; padding: 64px 20px; }
+  .done-screen.on { display: block; }
+  .done-screen h2 { font-family: 'Noto Serif TC', serif; font-size: 22px; color: var(--primary); margin-bottom: 12px; }
+  .done-screen p { font-size: 14px; color: var(--muted); line-height: 1.8; }
+
+  @media(max-width:560px) { .row2,.row3 { grid-template-columns: 1fr; } .cat-grid { grid-template-columns: 1fr; } .banner h1 { font-size: 15px; } }
+</style>
+</head>
+<body>
+
+<div class="banner">
+  <div class="wrap">
+    <div class="org">中華民國醫師公會全國聯合會</div>
+    <h1>特定美容醫學處置及美容醫學手術案例審查<br>審查【小組】委員推薦表</h1>
+    <div class="sub">美容醫學工作小組 · 審查分組委員人才庫建置</div>
+    <div class="badge">每會可推薦若干名</div>
+    <div class="count-bar">
+      已推薦 <span class="count-num" id="countNum">0</span> 人
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- 主表單 -->
+  <form id="form" novalidate>
+
+    <div class="sec-hd" style="margin-top:28px">
+      <div class="sec-n">!</div>
+      <div class="sec-t">填表注意事項</div>
+    </div>
+    <div class="notice">
+      <p>✦ 每次填寫代表推薦一位人選，送出後可繼續推薦下一位。<br>
+         ✦ 委員均為無給職，出席審查得支給出席費及差旅費。<br>
+         ✦ 委員任期與本會當屆理監事任期相同。<br>
+         ✦ 同一人選得跨類別推薦，請勾選所有適用的審查類別。</p>
+    </div>
+
+    <!-- 推薦單位 -->
+    <div class="sec-hd"><div class="sec-n">一</div><div class="sec-t">推薦單位</div></div>
+    <div class="card" id="orgCard">
+      <!-- 初次填寫：顯示輸入框 -->
+      <div id="orgInputs">
+        <div class="row3">
+          <div class="f">
+            <label>（醫）學會名稱<span class="req">*</span></label>
+            <input id="orgName" placeholder="學會全稱">
+            <div class="emsg" id="e_orgName">請填寫學會名稱</div>
+          </div>
+          <div class="f">
+            <label>聯絡窗口姓名<span class="req">*</span></label>
+            <input id="contactName" placeholder="姓名">
+            <div class="emsg" id="e_contactName">請填寫聯絡窗口</div>
+          </div>
+          <div class="f">
+            <label>聯絡電話<span class="req">*</span><span class="hint">含分機</span></label>
+            <input id="contactPhone" placeholder="02-XXXX-XXXX #XXX">
+            <div class="emsg" id="e_contactPhone">請填寫聯絡電話</div>
+          </div>
+        </div>
+      </div>
+      <!-- 第二筆起：顯示鎖定資訊 -->
+      <div id="orgLocked" style="display:none">
+        <div class="org-locked">
+          <div class="org-info">
+            <strong id="orgNameDisplay"></strong><br>
+            <span>聯絡窗口：<span id="contactNameDisplay"></span>　電話：<span id="contactPhoneDisplay"></span></span>
+          </div>
+          <button type="button" class="btn-change" onclick="changeOrg()">修改</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 被推薦人 -->
+    <div class="sec-hd"><div class="sec-n">二</div><div class="sec-t">被推薦人資料</div></div>
+    <div class="card">
+      <div class="row2">
+        <div class="f"><label>姓名<span class="req">*</span></label><input id="pName" placeholder="姓名"><div class="emsg" id="e_pName">請填寫姓名</div></div>
+        <div class="f"><label>身分證字號<span class="req">*</span></label><input id="pIdno" placeholder="A123456789" maxlength="10"><div class="emsg" id="e_pIdno">請填寫身分證字號</div></div>
+      </div>
+      <div class="row2">
+        <div class="f"><label>執業醫療院所名稱<span class="req">*</span></label><input id="pHospital" placeholder="醫院／診所全稱"><div class="emsg" id="e_pHospital">請填寫執業院所</div></div>
+        <div class="f"><label>專科別<span class="req">*</span></label><input id="pSpecialty" placeholder="例：整形外科、皮膚科"><div class="emsg" id="e_pSpecialty">請填寫專科別</div></div>
+      </div>
+      <div class="row3">
+        <div class="f"><label>聯絡電話<span class="hint">含分機</span></label><input id="pPhone" placeholder="02-XXXX-XXXX"></div>
+        <div class="f"><label>手機<span class="req">*</span></label><input id="pMobile" placeholder="09XX-XXX-XXX"><div class="emsg" id="e_pMobile">請填寫手機</div></div>
+        <div class="f"><label>Email<span class="req">*</span></label><input id="pEmail" type="email" placeholder="example@mail.com"><div class="emsg" id="e_pEmail">請填寫 Email</div></div>
+      </div>
+      <div class="row1 f"><label>通訊地址</label><input id="pAddr" placeholder="縣市 鄉鎮市區 路段"></div>
+    </div>
+
+    <!-- 審查類別 -->
+    <div class="sec-hd"><div class="sec-n">三</div><div class="sec-t">審查類別項目</div></div>
+    <div class="card">
+      <div class="emsg on" id="e_cats" style="margin-bottom:8px; display:none">請至少勾選一個審查類別</div>
+
+      <div class="cat-group-lbl">特定美容醫學處置類</div>
+      <div class="cat-grid" id="catGridP"></div>
+
+      <div class="cat-group-lbl" style="margin-top:14px">美容醫學手術類</div>
+      <div class="cat-grid" id="catGridS"></div>
+    </div>
+
+    <!-- 可出席時間 -->
+    <div class="sec-hd"><div class="sec-n">四</div><div class="sec-t">方便審查的時間</div></div>
+    <div class="card">
+      <div class="f">
+        <label>可出席時段<span class="hint">可複選</span></label>
+        <div class="avail-grid" id="availGrid"></div>
+      </div>
+    </div>
+
+    <!-- 學經簡歷 -->
+    <div class="sec-hd"><div class="sec-n">五</div><div class="sec-t">學經簡歷</div></div>
+    <div class="card">
+      <div class="f">
+        <label>學經簡歷<span class="hint">可簡述相關資歷、現任職務等</span></label>
+        <textarea id="pBio" placeholder="例：現任OO醫院整形外科主任，專長…"></textarea>
+      </div>
+    </div>
+
+    <div class="submit-area">
+      <button type="submit" class="btn-submit" id="submitBtn">送出此筆推薦</button>
+      <div class="submit-hint">送出後可繼續推薦下一位人選</div>
+    </div>
+  </form>
+
+  <!-- 單筆送出後 -->
+  <div class="next-screen" id="nextScreen">
+    <div class="next-icon">✓</div>
+    <h2>第 <span id="nextCount"></span> 筆推薦已送出</h2>
+    <p>是否繼續推薦下一位人選？<br>推薦單位資料將自動帶入，無需重填。</p>
+    <div>
+      <button class="btn-next" onclick="continueNext()">繼續推薦下一位</button>
+      <button class="btn-done" onclick="finishAll()">全部完成</button>
+    </div>
+  </div>
+
+  <!-- 全部完成 -->
+  <div class="done-screen" id="doneScreen">
+    <div style="width:64px;height:64px;background:#1e7a4a;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px;color:#fff">✓</div>
+    <h2>推薦表已全部送出</h2>
+    <p>感謝貴會惠予推薦 <strong id="finalCount"></strong> 位人選。<br>本會收到後將進行後續作業，如有疑問請與本會聯繫。</p>
+  </div>
+
+</div>
+
+<script>
+// ★ 請將此處換成你的 Apps Script 網址 ★
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwam7zhlHi_2D30m9apgwOPcImopHNP1oTddCIy025k15eNVGe47HXsgE77mtkDqppx-A/exec';
+const FORM_TYPE = 'B';
+
+const CATS_P = [
+  { code: 'P1', name: '光電治療類' },
+  { code: 'P2', name: '針劑注射治療類' },
+  { code: 'P3', name: 'FUE 植髮處置類' },
+];
+const CATS_S = [
+  { code: 'S1', name: '眼部美容手術' },
+  { code: 'S2', name: '鼻部與顏面輪廓手術' },
+  { code: 'S3', name: '微創抽脂與補脂手術' },
+  { code: 'S4', name: 'FUT 植髮手術' },
+  { code: 'S5', name: '乳房與私密處整形' },
+  { code: 'S6', name: '皮膚美容外科手術' },
+];
+const AVAIL = ['週一下午','週二下午','週三下午','週四下午','週五下午','其他'];
+
+let submitCount = 0;
+let orgSaved = null; // { name, contact, phone }
+
+function buildCatGrid(cats, gridId) {
+  const grid = document.getElementById(gridId);
+  cats.forEach(cat => {
+    const lbl = document.createElement('label');
+    lbl.className = 'cat-pill';
+    lbl.id = 'cp_' + cat.code;
+    lbl.innerHTML = `<input type="checkbox" value="${cat.code}"> <div class="cat-lbl"><span class="cat-code">${cat.code}</span> ${cat.name}</div>`;
+    lbl.querySelector('input').addEventListener('change', e => lbl.classList.toggle('on', e.target.checked));
+    grid.appendChild(lbl);
+  });
+}
+buildCatGrid(CATS_P, 'catGridP');
+buildCatGrid(CATS_S, 'catGridS');
+
+const availGrid = document.getElementById('availGrid');
+AVAIL.forEach(d => {
+  const lbl = document.createElement('label');
+  lbl.className = 'avail-pill';
+  lbl.innerHTML = `<input type="checkbox" value="${d}"> ${d}`;
+  lbl.querySelector('input').addEventListener('change', e => lbl.classList.toggle('on', e.target.checked));
+  availGrid.appendChild(lbl);
+});
+
+function v(id) { return (document.getElementById(id)?.value || '').trim(); }
+function showErr(id, show) {
+  document.getElementById('e_' + id)?.classList.toggle('on', show);
+  document.getElementById(id)?.classList.toggle('err', show);
+}
+function isEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
+function changeOrg() {
+  orgSaved = null;
+  document.getElementById('orgLocked').style.display = 'none';
+  document.getElementById('orgInputs').style.display = '';
+  document.getElementById('orgName').value = '';
+  document.getElementById('contactName').value = '';
+  document.getElementById('contactPhone').value = '';
+}
+
+function resetPersonFields() {
+  ['pName','pIdno','pHospital','pSpecialty','pPhone','pMobile','pEmail','pAddr','pBio'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+    el?.classList.remove('err');
+  });
+  document.querySelectorAll('.cat-pill').forEach(p => { p.classList.remove('on'); p.querySelector('input').checked = false; });
+  document.querySelectorAll('.avail-pill').forEach(p => { p.classList.remove('on'); p.querySelector('input').checked = false; });
+  document.getElementById('e_cats').style.display = 'none';
+  ['pName','pIdno','pHospital','pSpecialty','pMobile','pEmail'].forEach(id => showErr(id, false));
+}
+
+document.getElementById('form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  let ok = true;
+
+  // 推薦單位驗證（只在第一筆時）
+  if (!orgSaved) {
+    [['orgName', x=>!!x], ['contactName', x=>!!x], ['contactPhone', x=>!!x]].forEach(([id, fn]) => {
+      const valid = fn(v(id));
+      showErr(id, !valid);
+      if (!valid) ok = false;
+    });
+  }
+
+  // 被推薦人驗證
+  [
+    ['pName', x=>!!x],
+    ['pIdno', x=>!!x],
+    ['pHospital', x=>!!x],
+    ['pSpecialty', x=>!!x],
+    ['pMobile', x=>!!x],
+    ['pEmail', x=>isEmail(x)],
+  ].forEach(([id, fn]) => {
+    const valid = fn(v(id));
+    showErr(id, !valid);
+    if (!valid) ok = false;
+  });
+
+  const selectedCats = [...document.querySelectorAll('.cat-pill input:checked')].map(x => x.value);
+  const catsErr = document.getElementById('e_cats');
+  if (selectedCats.length === 0) {
+    catsErr.style.display = 'block';
+    ok = false;
+  } else {
+    catsErr.style.display = 'none';
+  }
+
+  if (!ok) { document.querySelector('.err')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+
+  // 儲存推薦單位
+  if (!orgSaved) {
+    orgSaved = { name: v('orgName'), contact: v('contactName'), phone: v('contactPhone') };
+  }
+
+  const avail = [...document.querySelectorAll('.avail-pill input:checked')].map(x => x.value).join('、');
+
+  const payload = {
+    formType: FORM_TYPE,
+    orgName: orgSaved.name,
+    contactName: orgSaved.contact,
+    contactPhone: orgSaved.phone,
+    pName: v('pName'),
+    pIdno: v('pIdno'),
+    pHospital: v('pHospital'),
+    pSpecialty: v('pSpecialty'),
+    pPhone: v('pPhone'),
+    pMobile: v('pMobile'),
+    pEmail: v('pEmail'),
+    pAddr: v('pAddr'),
+    categories: selectedCats.join('、'),
+    availability: avail,
+    bio: v('pBio'),
+    submittedAt: new Date().toLocaleString('zh-TW')
+  };
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '送出中…';
+
+  try {
+    await fetch(GAS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    submitCount++;
+    document.getElementById('countNum').textContent = submitCount;
+
+    // 顯示推薦單位鎖定
+    document.getElementById('orgInputs').style.display = 'none';
+    document.getElementById('orgLocked').style.display = '';
+    document.getElementById('orgNameDisplay').textContent = orgSaved.name;
+    document.getElementById('contactNameDisplay').textContent = orgSaved.contact;
+    document.getElementById('contactPhoneDisplay').textContent = orgSaved.phone;
+
+    document.getElementById('form').style.display = 'none';
+    document.getElementById('nextCount').textContent = submitCount;
+    document.getElementById('nextScreen').classList.add('on');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = '送出此筆推薦';
+    alert('送出失敗，請稍後再試或聯繫本會。');
+  }
+});
+
+function continueNext() {
+  document.getElementById('nextScreen').classList.remove('on');
+  resetPersonFields();
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = false;
+  btn.textContent = '送出此筆推薦';
+  document.getElementById('form').style.display = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function finishAll() {
+  document.getElementById('nextScreen').classList.remove('on');
+  document.getElementById('finalCount').textContent = submitCount;
+  document.getElementById('doneScreen').classList.add('on');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

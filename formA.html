@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>美容醫學工作小組委員推薦表</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500&display=swap');
+
+  :root {
+    --primary: #1a4a6e;
+    --accent: #c8933a;
+    --bg: #f5f3ef;
+    --surface: #fff;
+    --border: #d9d3c8;
+    --text: #1c1c1c;
+    --muted: #6b6560;
+    --error: #c0392b;
+    --success: #1e7a4a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 60px; }
+
+  .banner { background: var(--primary); color: #fff; padding: 28px 32px 22px; border-bottom: 4px solid var(--accent); }
+  .banner .org { font-size: 11px; letter-spacing: 2px; color: rgba(255,255,255,.6); margin-bottom: 8px; }
+  .banner h1 { font-family: 'Noto Serif TC', serif; font-size: 18px; font-weight: 700; line-height: 1.65; margin-bottom: 6px; }
+  .banner .sub { font-size: 13px; color: rgba(255,255,255,.7); }
+  .badge { display: inline-block; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: 1px; margin-top: 10px; }
+
+  .wrap { max-width: 660px; margin: 0 auto; padding: 0 16px; }
+
+  .sec-hd { display: flex; align-items: center; gap: 10px; margin: 32px 0 16px; }
+  .sec-n { width: 28px; height: 28px; background: var(--primary); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+  .sec-t { font-family: 'Noto Serif TC', serif; font-size: 15px; font-weight: 700; color: var(--primary); border-bottom: 2px solid var(--accent); padding-bottom: 3px; flex: 1; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 22px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+
+  .notice { background: #fdf8ee; border-left: 3px solid var(--accent); padding: 12px 16px; border-radius: 0 4px 4px 0; margin-bottom: 18px; }
+  .notice p { font-size: 13px; color: #5a4a2a; line-height: 1.85; }
+
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .row1 { margin-bottom: 14px; }
+  .f { display: flex; flex-direction: column; gap: 5px; }
+  label { font-size: 13px; font-weight: 500; color: #3a3530; }
+  .req { color: var(--error); margin-left: 2px; }
+  .hint { font-weight: 300; color: var(--muted); font-size: 11px; margin-left: 4px; }
+
+  input, textarea {
+    border: 1px solid var(--border); border-radius: 4px; padding: 9px 11px;
+    font-size: 14px; font-family: 'Noto Sans TC', sans-serif; color: var(--text);
+    background: #fff; outline: none; width: 100%;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  input:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,74,110,.1); }
+  input.err, textarea.err { border-color: var(--error); }
+  textarea { resize: vertical; min-height: 85px; }
+
+  .avail-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+  .avail-pill {
+    display: flex; align-items: center; gap: 6px; padding: 6px 12px;
+    border: 1px solid var(--border); border-radius: 20px; cursor: pointer;
+    font-size: 13px; transition: all .15s; user-select: none;
+  }
+  .avail-pill input { width: auto; accent-color: var(--primary); }
+  .avail-pill.on { border-color: var(--primary); background: #eef3f8; color: var(--primary); font-weight: 500; }
+
+  .emsg { font-size: 11px; color: var(--error); margin-top: 3px; display: none; }
+  .emsg.on { display: block; }
+  .divider { border: none; border-top: 1px dashed var(--border); margin: 16px 0; }
+
+  .submit-area { margin-top: 32px; text-align: center; }
+  .btn-submit {
+    background: var(--primary); color: #fff; border: none; border-radius: 6px;
+    padding: 13px 48px; font-size: 16px; font-family: 'Noto Serif TC', serif;
+    font-weight: 700; cursor: pointer; transition: all .2s; letter-spacing: 1px;
+  }
+  .btn-submit:hover { background: #0f3352; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(26,74,110,.25); }
+  .btn-submit:disabled { background: #aaa; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .success { display: none; text-align: center; padding: 64px 20px; }
+  .success.on { display: block; }
+  .success-icon { width: 64px; height: 64px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 28px; color: #fff; }
+  .success h2 { font-family: 'Noto Serif TC', serif; font-size: 22px; color: var(--primary); margin-bottom: 12px; }
+  .success p { font-size: 14px; color: var(--muted); line-height: 1.8; }
+
+  @media(max-width:560px) { .row2,.row3 { grid-template-columns: 1fr; } .banner h1 { font-size: 15px; } }
+</style>
+</head>
+<body>
+
+<div class="banner">
+  <div class="wrap">
+    <div class="org">中華民國醫師公會全國聯合會</div>
+    <h1>特定美容醫學處置及美容醫學手術案例審查<br>美容醫學工作小組委員推薦表</h1>
+    <div class="sub">美容醫學工作小組</div>
+    <div class="badge">每會限推薦 1 名</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <form id="form" novalidate>
+
+    <div class="sec-hd" style="margin-top:28px">
+      <div class="sec-n">!</div>
+      <div class="sec-t">填表注意事項</div>
+    </div>
+    <div class="notice">
+      <p>✦ 委員均為無給職，出席審查得支給出席費及差旅費。<br>
+         ✦ 委員任期與本會當屆理監事任期相同。<br>
+         ✦ 審查作業以集中到會審查為原則，依本會安排之時間及地點執行。<br>
+         ✦ 每會推薦 1 名，如有多名人選請分別填表送出。</p>
+    </div>
+
+    <!-- 推薦單位 -->
+    <div class="sec-hd"><div class="sec-n">一</div><div class="sec-t">推薦單位</div></div>
+    <div class="card">
+      <div class="row3">
+        <div class="f">
+          <label>（醫）學會名稱<span class="req">*</span></label>
+          <input id="orgName" placeholder="學會全稱">
+          <div class="emsg" id="e_orgName">請填寫學會名稱</div>
+        </div>
+        <div class="f">
+          <label>聯絡窗口姓名<span class="req">*</span></label>
+          <input id="contactName" placeholder="姓名">
+          <div class="emsg" id="e_contactName">請填寫聯絡窗口</div>
+        </div>
+        <div class="f">
+          <label>聯絡電話<span class="req">*</span><span class="hint">含分機</span></label>
+          <input id="contactPhone" placeholder="02-XXXX-XXXX #XXX">
+          <div class="emsg" id="e_contactPhone">請填寫聯絡電話</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 被推薦人 -->
+    <div class="sec-hd"><div class="sec-n">二</div><div class="sec-t">被推薦人資料</div></div>
+    <div class="card">
+      <div class="row2">
+        <div class="f"><label>姓名<span class="req">*</span></label><input id="pName" placeholder="姓名"><div class="emsg" id="e_pName">請填寫姓名</div></div>
+        <div class="f"><label>身分證字號<span class="req">*</span></label><input id="pIdno" placeholder="A123456789" maxlength="10"><div class="emsg" id="e_pIdno">請填寫身分證字號</div></div>
+      </div>
+      <div class="row2">
+        <div class="f"><label>執業醫療院所名稱<span class="req">*</span></label><input id="pHospital" placeholder="醫院／診所全稱"><div class="emsg" id="e_pHospital">請填寫執業院所</div></div>
+        <div class="f"><label>職稱</label><input id="pTitle" placeholder="例：主任、院長"></div>
+      </div>
+      <div class="row2">
+        <div class="f"><label>專科別<span class="req">*</span></label><input id="pSpecialty" placeholder="例：整形外科、皮膚科"><div class="emsg" id="e_pSpecialty">請填寫專科別</div></div>
+        <div class="f"><label>手機<span class="req">*</span></label><input id="pMobile" placeholder="09XX-XXX-XXX"><div class="emsg" id="e_pMobile">請填寫手機</div></div>
+      </div>
+      <div class="row3">
+        <div class="f"><label>聯絡電話<span class="hint">含分機</span></label><input id="pPhone" placeholder="02-XXXX-XXXX"></div>
+        <div class="f"><label>傳真</label><input id="pFax" placeholder="02-XXXX-XXXX"></div>
+        <div class="f"><label>Email<span class="req">*</span></label><input id="pEmail" type="email" placeholder="example@mail.com"><div class="emsg" id="e_pEmail">請填寫 Email</div></div>
+      </div>
+      <div class="row1 f"><label>通訊地址</label><input id="pAddr" placeholder="縣市 鄉鎮市區 路段"></div>
+
+      <hr class="divider">
+      <div class="f">
+        <label>參與意願／專長領域<span class="req">*</span><span class="hint">可複選</span></label>
+        <div class="emsg" id="e_roles">請至少勾選一項</div>
+        <div class="avail-grid" id="roleGrid"></div>
+      </div>
+      <hr class="divider">
+      <div class="f">
+        <label>方便開會的時間<span class="hint">可複選</span></label>
+        <div class="avail-grid" id="availGrid"></div>
+      </div>
+      <hr class="divider">
+      <div class="row1 f">
+        <label>學經簡歷<span class="hint">可簡述相關資歷、現任職務等</span></label>
+        <textarea id="pBio" placeholder="例：現任OO醫院整形外科主任，專長…"></textarea>
+      </div>
+    </div>
+
+    <div class="submit-area">
+      <button type="submit" class="btn-submit" id="submitBtn">確認送出推薦表</button>
+    </div>
+  </form>
+
+  <div class="success" id="successBox">
+    <div class="success-icon">✓</div>
+    <h2>推薦表已成功送出</h2>
+    <p>感謝貴會惠予推薦，本會收到後將進行後續作業。<br>如需再次填寫，請重新整理頁面。</p>
+  </div>
+</div>
+
+<script>
+// ★ 請將此處換成你的 Apps Script 網址 ★
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwam7zhlHi_2D30m9apgwOPcImopHNP1oTddCIy025k15eNVGe47HXsgE77mtkDqppx-A/exec';
+const FORM_TYPE = 'A'; // 工作小組表單
+
+const ROLES = ['案例審查', '課程規劃與開課資格審議', '診所品質認證'];
+const roleGrid = document.getElementById('roleGrid');
+ROLES.forEach(r => {
+  const lbl = document.createElement('label');
+  lbl.className = 'avail-pill';
+  lbl.id = 'role_' + r;
+  lbl.innerHTML = `<input type="checkbox" value="${r}"> ${r}`;
+  lbl.querySelector('input').addEventListener('change', e => lbl.classList.toggle('on', e.target.checked));
+  roleGrid.appendChild(lbl);
+});
+
+
+const grid = document.getElementById('availGrid');
+AVAIL.forEach(d => {
+  const lbl = document.createElement('label');
+  lbl.className = 'avail-pill';
+  lbl.id = 'av_' + d;
+  lbl.innerHTML = `<input type="checkbox" value="${d}"> ${d}`;
+  lbl.querySelector('input').addEventListener('change', e => lbl.classList.toggle('on', e.target.checked));
+  grid.appendChild(lbl);
+});
+
+function v(id) { return (document.getElementById(id)?.value || '').trim(); }
+function showErr(id, show) { document.getElementById('e_' + id)?.classList.toggle('on', show); document.getElementById(id)?.classList.toggle('err', show); }
+function isEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
+document.getElementById('form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  let ok = true;
+
+  const reqFields = [
+    ['orgName', x => !!x],
+    ['contactName', x => !!x],
+    ['contactPhone', x => !!x],
+    ['pName', x => !!x],
+    ['pIdno', x => !!x],
+    ['pHospital', x => !!x],
+    ['pSpecialty', x => !!x],
+    ['pMobile', x => !!x],
+    ['pEmail', x => isEmail(x)],
+  ];
+  reqFields.forEach(([id, fn]) => {
+    const valid = fn(v(id));
+    showErr(id, !valid);
+    if (!valid) ok = false;
+  });
+  const roles = [...document.querySelectorAll('#roleGrid input:checked')].map(x => x.value);
+  const rolesOk = roles.length > 0;
+  document.getElementById('e_roles').classList.toggle('on', !rolesOk);
+  if (!rolesOk) ok = false;
+
+  if (!ok) { document.querySelector('.err, .emsg.on')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+
+  const avail = [...document.querySelectorAll('#availGrid input:checked')].map(x => x.value).join('、');
+
+  const payload = {
+    formType: FORM_TYPE,
+    orgName: v('orgName'),
+    contactName: v('contactName'),
+    contactPhone: v('contactPhone'),
+    pName: v('pName'),
+    pIdno: v('pIdno'),
+    pHospital: v('pHospital'),
+    pTitle: v('pTitle'),
+    pSpecialty: v('pSpecialty'),
+    pPhone: v('pPhone'),
+    pMobile: v('pMobile'),
+    pFax: v('pFax'),
+    pEmail: v('pEmail'),
+    pAddr: v('pAddr'),
+    roles: roles.join('、'),
+    availability: avail,
+    bio: v('pBio'),
+    submittedAt: new Date().toLocaleString('zh-TW')
+  };
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '送出中…';
+
+  try {
+    await fetch(GAS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    document.getElementById('form').style.display = 'none';
+    document.getElementById('successBox').classList.add('on');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = '確認送出推薦表';
+    alert('送出失敗，請稍後再試或聯繫本會。');
+  }
+});
+</script>
+</body>
+</html>
