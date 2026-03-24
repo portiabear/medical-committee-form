@@ -106,10 +106,10 @@
       <div class="sec-t">填表注意事項</div>
     </div>
     <div class="notice">
-      <p>✦ 委員均為無給職，出席審查得支給出席費及差旅費。<br>
+      <p>✦ 委員均為無給職，出席會議得支給差旅費。<br>
          ✦ 委員任期與本會當屆理監事任期相同。<br>
-         ✦ 審查作業以集中到會審查為原則，依本會安排之時間及地點執行。<br>
-         ✦ 每會推薦 1 名，如有多名人選請分別填表送出。</p>
+         ✦ 推薦名單將作為遴選之參考，最終委員人選仍由本會理事長依整體需求遴聘之。<br>
+         ✦ 經聘為工作小組委員，召集委員得參考推薦表填寫之專長、意願組建分組。</p>
     </div>
 
     <!-- 推薦單位 -->
@@ -137,10 +137,7 @@
     <!-- 被推薦人 -->
     <div class="sec-hd"><div class="sec-n">二</div><div class="sec-t">被推薦人資料</div></div>
     <div class="card">
-      <div class="row2">
-        <div class="f"><label>姓名<span class="req">*</span></label><input id="pName" placeholder="姓名"><div class="emsg" id="e_pName">請填寫姓名</div></div>
-        <div class="f"><label>身分證字號<span class="req">*</span></label><input id="pIdno" placeholder="A123456789" maxlength="10"><div class="emsg" id="e_pIdno">請填寫身分證字號</div></div>
-      </div>
+      <div class="row1 f"><label>姓名<span class="req">*</span></label><input id="pName" placeholder="姓名"><div class="emsg" id="e_pName">請填寫姓名</div></div>
       <div class="row2">
         <div class="f"><label>執業醫療院所名稱<span class="req">*</span></label><input id="pHospital" placeholder="醫院／診所全稱"><div class="emsg" id="e_pHospital">請填寫執業院所</div></div>
         <div class="f"><label>職稱</label><input id="pTitle" placeholder="例：主任、院長"></div>
@@ -154,7 +151,6 @@
         <div class="f"><label>傳真</label><input id="pFax" placeholder="02-XXXX-XXXX"></div>
         <div class="f"><label>Email<span class="req">*</span></label><input id="pEmail" type="email" placeholder="example@mail.com"><div class="emsg" id="e_pEmail">請填寫 Email</div></div>
       </div>
-      <div class="row1 f"><label>通訊地址</label><input id="pAddr" placeholder="縣市 鄉鎮市區 路段"></div>
 
       <hr class="divider">
       <div class="f">
@@ -182,7 +178,7 @@
   <div class="success" id="successBox">
     <div class="success-icon">✓</div>
     <h2>推薦表已成功送出</h2>
-    <p>感謝貴會惠予推薦，本會收到後將進行後續作業。<br>如需再次填寫，請重新整理頁面。</p>
+    <p>感謝貴會惠予推薦，本會收到後將進行後續作業。</p>
   </div>
 </div>
 
@@ -227,7 +223,6 @@ document.getElementById('form').addEventListener('submit', async function(e) {
     ['contactName', x => !!x],
     ['contactPhone', x => !!x],
     ['pName', x => !!x],
-    ['pIdno', x => !!x],
     ['pHospital', x => !!x],
     ['pSpecialty', x => !!x],
     ['pMobile', x => !!x],
@@ -253,7 +248,6 @@ document.getElementById('form').addEventListener('submit', async function(e) {
     contactName: v('contactName'),
     contactPhone: v('contactPhone'),
     pName: v('pName'),
-    pIdno: v('pIdno'),
     pHospital: v('pHospital'),
     pTitle: v('pTitle'),
     pSpecialty: v('pSpecialty'),
@@ -261,7 +255,6 @@ document.getElementById('form').addEventListener('submit', async function(e) {
     pMobile: v('pMobile'),
     pFax: v('pFax'),
     pEmail: v('pEmail'),
-    pAddr: v('pAddr'),
     roles: roles.join('、'),
     availability: avail,
     bio: v('pBio'),

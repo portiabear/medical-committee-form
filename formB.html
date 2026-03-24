@@ -192,10 +192,7 @@
     <!-- 被推薦人 -->
     <div class="sec-hd"><div class="sec-n">二</div><div class="sec-t">被推薦人資料</div></div>
     <div class="card">
-      <div class="row2">
-        <div class="f"><label>姓名<span class="req">*</span></label><input id="pName" placeholder="姓名"><div class="emsg" id="e_pName">請填寫姓名</div></div>
-        <div class="f"><label>身分證字號<span class="req">*</span></label><input id="pIdno" placeholder="A123456789" maxlength="10"><div class="emsg" id="e_pIdno">請填寫身分證字號</div></div>
-      </div>
+      <div class="row1 f"><label>姓名<span class="req">*</span></label><input id="pName" placeholder="姓名"><div class="emsg" id="e_pName">請填寫姓名</div></div>
       <div class="row2">
         <div class="f"><label>執業醫療院所名稱<span class="req">*</span></label><input id="pHospital" placeholder="醫院／診所全稱"><div class="emsg" id="e_pHospital">請填寫執業院所</div></div>
         <div class="f"><label>專科別<span class="req">*</span></label><input id="pSpecialty" placeholder="例：整形外科、皮膚科"><div class="emsg" id="e_pSpecialty">請填寫專科別</div></div>
@@ -205,7 +202,6 @@
         <div class="f"><label>手機<span class="req">*</span></label><input id="pMobile" placeholder="09XX-XXX-XXX"><div class="emsg" id="e_pMobile">請填寫手機</div></div>
         <div class="f"><label>Email<span class="req">*</span></label><input id="pEmail" type="email" placeholder="example@mail.com"><div class="emsg" id="e_pEmail">請填寫 Email</div></div>
       </div>
-      <div class="row1 f"><label>通訊地址</label><input id="pAddr" placeholder="縣市 鄉鎮市區 路段"></div>
     </div>
 
     <!-- 審查類別 -->
@@ -327,7 +323,7 @@ function changeOrg() {
 }
 
 function resetPersonFields() {
-  ['pName','pIdno','pHospital','pSpecialty','pPhone','pMobile','pEmail','pAddr','pBio'].forEach(id => {
+  ['pName','pHospital','pSpecialty','pPhone','pMobile','pEmail','pBio'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
     el?.classList.remove('err');
@@ -335,7 +331,7 @@ function resetPersonFields() {
   document.querySelectorAll('.cat-pill').forEach(p => { p.classList.remove('on'); p.querySelector('input').checked = false; });
   document.querySelectorAll('.avail-pill').forEach(p => { p.classList.remove('on'); p.querySelector('input').checked = false; });
   document.getElementById('e_cats').style.display = 'none';
-  ['pName','pIdno','pHospital','pSpecialty','pMobile','pEmail'].forEach(id => showErr(id, false));
+  ['pName','pHospital','pSpecialty','pMobile','pEmail'].forEach(id => showErr(id, false));
 }
 
 document.getElementById('form').addEventListener('submit', async function(e) {
@@ -354,7 +350,6 @@ document.getElementById('form').addEventListener('submit', async function(e) {
   // 被推薦人驗證
   [
     ['pName', x=>!!x],
-    ['pIdno', x=>!!x],
     ['pHospital', x=>!!x],
     ['pSpecialty', x=>!!x],
     ['pMobile', x=>!!x],
@@ -389,13 +384,11 @@ document.getElementById('form').addEventListener('submit', async function(e) {
     contactName: orgSaved.contact,
     contactPhone: orgSaved.phone,
     pName: v('pName'),
-    pIdno: v('pIdno'),
     pHospital: v('pHospital'),
     pSpecialty: v('pSpecialty'),
     pPhone: v('pPhone'),
     pMobile: v('pMobile'),
     pEmail: v('pEmail'),
-    pAddr: v('pAddr'),
     categories: selectedCats.join('、'),
     availability: avail,
     bio: v('pBio'),
